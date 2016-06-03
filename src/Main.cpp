@@ -111,12 +111,23 @@ int main(int argc, char *argv[]) {
 	proddef[13] = 1;
 	proddef[14] = 0; 
 	
-	g2int datadef[5];
-	datadef[0]= -943514112;
-	datadef[1] = 0;
-	datadef[2] = 2; // decimal scale value
-	datadef[3] = 24; // number of bits
-	datadef[4] = 0;
+  g2int datadef[16];
+  datadef[0] = 0; // Ref Value
+  datadef[1] = 0; // Binary scale factor
+  datadef[2] = 1; // decimal scale value
+  datadef[3] = 7; // number of bits
+  datadef[4] = 0; // Type of original field values (0 = float)
+  datadef[5] = 1; // Group Splitting method
+  datadef[6] = 1; // Missing value management
+  datadef[7] = 3296313344; // -999.0 Primary missing value http://www.h-schmidt.net/FloatConverter/IEEE754.html
+  datadef[8] = -1; // Secondary missing value
+  datadef[9] = 25786; // number of groups
+  datadef[10] = 0; // reference for group widths
+  datadef[11] = 4; // number of bits for group widths
+  datadef[12] = 1; // reference for group lengths
+  datadef[13] = 1; // length increment for group lengths
+  datadef[14] = 6135; // true length of last group
+  datadef[15] = 13; // number of bits for scaled group lengths
 	
 	length = g2_addgrid(buffer, griddef0, griddef, NULL, 0);
 
@@ -124,11 +135,15 @@ int main(int argc, char *argv[]) {
 	for (int i = 0; i < data->numRows; i++) {
 		for (int j = 0; j < data->numCols; j++) {
 			float val = data->data[i][j]; //floorf(data->data[i][j] * 10.0 + 0.5f) / 10.0f;
-			gridData[i * data->numCols + j] = val;
+			if (val == data->noData) {
+				gridData[i * data->numCols + j] = -999.0;
+			} else {
+				gridData[i * data->numCols + j] = val;
+			}
 		}
 	}
 
-	length = g2_addfield(buffer, 0, proddef, NULL, 0, 41, datadef, gridData, data->numCols * data->numRows, 255, NULL);
+	length = g2_addfield(buffer, 0, proddef, NULL, 0, 2, datadef, gridData, data->numCols * data->numRows, 255, NULL);
 	length = g2_gribend(buffer);
 	
 	printf("Length is now %i\n", length);
