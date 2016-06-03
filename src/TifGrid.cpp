@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include "xtiffio.h"
 #include "geotiffio.h"
+#include "Messages.h"
 #include "TifGrid.h"
 
 #define TIFFTAG_GDAL_METADATA 42112
@@ -75,7 +76,7 @@ FloatGrid *ReadFloatTifGrid(const char *file, FloatGrid *incGrid) {
   TIFFGetField(tif, TIFFTAG_SAMPLEFORMAT, &sampleFormat);
   
   if (sampleFormat != SAMPLEFORMAT_IEEEFP || bitsPerSample != 32 || samplesPerPixel != 1) {
-    //WARNING_LOGF("%s is not a supported Float32 GeoTiff", file);
+    WARNING_LOGF("%s is not a supported Float32 GeoTiff", file);
     GTIFFree(gtif);
     XTIFFClose(tif);
     return NULL;
@@ -102,7 +103,7 @@ FloatGrid *ReadFloatTifGrid(const char *file, FloatGrid *incGrid) {
     grid->numRows = height;
     grid->data = new float*[grid->numRows]();
     if (!grid->data) {
-      //WARNING_LOGF("TIF file %s too large (out of memory) with %li rows", file, grid->numRows);
+      WARNING_LOGF("TIF file %s too large (out of memory) with %li rows", file, grid->numRows);
       delete grid;
       GTIFFree(gtif);
       XTIFFClose(tif);
@@ -111,7 +112,7 @@ FloatGrid *ReadFloatTifGrid(const char *file, FloatGrid *incGrid) {
     for (long i = 0; i < grid->numRows; i++) {
       grid->data[i] = new float[grid->numCols]();
       if (!grid->data[i]) {
-        //WARNING_LOGF("TIF file %s too large (out of memory) with %li columns", file, grid->numCols);
+        WARNING_LOGF("TIF file %s too large (out of memory) with %li columns", file, grid->numCols);
         delete grid;
         GTIFFree(gtif);
         XTIFFClose(tif);
@@ -134,7 +135,7 @@ FloatGrid *ReadFloatTifGrid(const char *file, FloatGrid *incGrid) {
   
   for (long i = 0; i < grid->numRows; i++) {
     if (TIFFReadScanline(tif, grid->data[i], (unsigned int)i, 1) == -1) {
-      //WARNING_LOGF("TIF file %s corrupt? (scanline read failed)", file);
+      WARNING_LOGF("TIF file %s corrupt? (scanline read failed)", file);
       delete grid;
       GTIFFree(gtif);
       XTIFFClose(tif);
@@ -233,7 +234,7 @@ LongGrid *ReadLongTifGrid(const char *file) {
   TIFFGetField(tif, TIFFTAG_SAMPLEFORMAT, &sampleFormat);
   
   if (sampleFormat != SAMPLEFORMAT_INT || bitsPerSample != 32 || samplesPerPixel != 1) {
-    //WARNING_LOGF("%s is not a supported Int GeoTiff", file);
+    WARNING_LOGF("%s is not a supported Int GeoTiff", file);
     GTIFFree(gtif);
     XTIFFClose(tif);
     return NULL;

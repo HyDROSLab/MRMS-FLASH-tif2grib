@@ -95,7 +95,7 @@ int enc_png(char *data,g2int width,g2int height,g2int nbits,char *pngbuf)
 
 /*     Set the image size, colortype, filter type, etc...      */
 
-/*    printf("SAGTsettingIHDR %d %d %d\n",width,height,bit_depth); */
+    /*printf("SAGTsettingIHDR %d %d %d\n",width,height,bit_depth);*/
     bit_depth=nbits;
     color_type=PNG_COLOR_TYPE_GRAY;
     if (nbits == 24 ) {
@@ -106,6 +106,7 @@ int enc_png(char *data,g2int width,g2int height,g2int nbits,char *pngbuf)
         bit_depth=8;
         color_type=PNG_COLOR_TYPE_RGB_ALPHA;
     }
+		png_set_user_limits(png_ptr, 0x7fffffffL, 0x7fffffffL);
     png_set_IHDR(png_ptr, info_ptr, width, height,
        bit_depth, color_type, PNG_INTERLACE_NONE,
        PNG_COMPRESSION_TYPE_DEFAULT, PNG_FILTER_TYPE_DEFAULT);
