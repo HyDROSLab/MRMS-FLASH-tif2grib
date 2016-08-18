@@ -10,6 +10,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <vector>
+#include <cmath>
 #include <math.h>
 #include <time.h>
 #include <zlib.h>
@@ -135,7 +136,7 @@ int main(int argc, char *argv[]) {
 	for (int i = 0; i < data->numRows; i++) {
 		for (int j = 0; j < data->numCols; j++) {
 			float val = data->data[i][j]; //floorf(data->data[i][j] * 10.0 + 0.5f) / 10.0f;
-			if (val == data->noData) {
+			if (val == data->noData || !std::isfinite(val)) {
 				gridData[i * data->numCols + j] = -999.0;
 			} else {
 				gridData[i * data->numCols + j] = val;

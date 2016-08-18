@@ -25,7 +25,7 @@ INC=
 #   appropriate compiler flag to allow the use of "//" comment indicators.
 #
 
-CFLAGS= -O3 $(INC) $(DEFS)
+CFLAGS= -O3 -g $(INC) $(DEFS)
 
 CC=cc
 

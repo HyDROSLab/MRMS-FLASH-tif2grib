@@ -10,6 +10,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <vector>
+#include <cmath>
 #include <math.h>
 #include <time.h>
 #include <zlib.h>
@@ -141,7 +142,7 @@ int main(int argc, char *argv[]) {
 	g2float *gridData = new g2float[data->numCols * data->numRows];
 	for (int i = 0; i < data->numRows; i++) {
 		for (int j = 0; j < data->numCols; j++) {
-			if (mask->data[i][j] > 0 && data->data[i][j] != data->noData) {
+			if (mask->data[i][j] > 0 && data->data[i][j] != data->noData && std::isfinite(data->data[i][j])) {
 				float val = floorf(data->data[i][j] * 10.0 + 0.5f) / 10.0f;
 				gridData[i * data->numCols + j] = val;
 			} else {
@@ -153,7 +154,7 @@ int main(int argc, char *argv[]) {
 	length = g2_addfield(buffer, 0, proddef, NULL, 0, 2, datadef, gridData, data->numCols * data->numRows, 255, NULL);
 	length = g2_gribend(buffer);
 	
-	printf("Length is now %i\n", length);
+	printf("Length is now2 %i\n", length);
 	
 	/*gzFile fp = gzopen(argv[3],"w9");
 	if (!fp) {

@@ -98,6 +98,7 @@ void misspack(g2float *fld,g2int ndpts,g2int idrsnum,g2int *idrstmpl,
 //  AND set up missing value mapping of the field.
 //
       ifldmiss = calloc(ndpts,sizeof(g2int));
+      printf("alloced %i\n", ndpts);
       rmin=1E+37;
       if ( missopt ==  1 ) {        // Primary missing value only
          for ( j=0; j<ndpts; j++) {
@@ -301,7 +302,10 @@ void misspack(g2float *fld,g2int ndpts,g2int idrsnum,g2int *idrstmpl,
                         jmin,jmax,lbit,glen,&maxgrps,&ngroups,&ibit,&jbit,
                         &kbit,&novref,&lbitref,&ier);
            //printf("SAGier = %d %d %d %d %d %d\n",ier,ibit,jbit,kbit,novref,lbitref);
-           for ( ng=0; ng<ngroups; ng++) glen[ng]=glen[ng]+novref;
+           for ( ng=0; ng<ngroups; ng++) {
+		//printf("ng is %i, glen %i\n", ng, glen[ng]);
+		glen[ng]=glen[ng]+novref;
+	}
            free(jmin);
            free(jmax);
            free(lbit);
@@ -314,6 +318,7 @@ void misspack(g2float *fld,g2int ndpts,g2int idrsnum,g2int *idrstmpl,
         for ( ng=0; ng<ngroups; ng++) {
            //  how many of each type?
            num0=num1=num2=0;
+	  // printf("n is %i, glen is %i, %i\n", n, glen[ng], n+glen[ng]);
            for (j=n; j<n+glen[ng]; j++) {
                if (ifldmiss[j] == 0 ) num0++;
                if (ifldmiss[j] == 1 ) num1++;
